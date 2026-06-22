@@ -1,0 +1,20 @@
+{
+  "posts": [
+    {
+      "slug": "hello-world",
+      "title": "你好，世界 — 欢迎来到 NeedHub",
+      "excerpt": "这是 NeedHub 的第一篇文章！在这里我将分享探索计算机科学的旅程、发现好用的软件，以及一路走来的学习心得。",
+      "date": "2026-06-22",
+      "category": "tech",
+      "tags": ["入门", "博客", "开始"]
+    },
+    {
+      "slug": "software-picks",
+      "title": "2026 开发者必备工具与软件推荐",
+      "excerpt": "精选一系列强大的开发工具——从终端神器到 AI 代码助手，每个开发者都值得拥有。",
+      "date": "2026-06-22",
+      "category": "software",
+      "tags": ["工具", "效率", "开发者"]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+/* ============================================
+   NeedHub — CSS Variables (Design Tokens)
+   ============================================ */
+
+:root {
+  /* Brand colors */
+  --nh-brand: #3B82F6;
+  --nh-brand-light: #60A5FA;
+  --nh-brand-dark: #2563EB;
+  --nh-brand-glow: rgba(59, 130, 246, 0.15);
+
+  /* Accent gradient */
+  --nh-gradient: linear-gradient(135deg, #3B82F6, #06B6D4);
+  --nh-gradient-hover: linear-gradient(135deg, #2563EB, #0891B2);
+
+  /* Category colors */
+  --nh-tech: #3B82F6;
+  --nh-software: #10B981;
+  --nh-notes: #F59E0B;
+
+  /* Neutral palette (light) */
+  --nh-bg: #FAFBFC;
+  --nh-bg-card: #FFFFFF;
+  --nh-bg-elevated: #F3F4F6;
+  --nh-text: #1F2937;
+  --nh-text-secondary: #6B7280;
+  --nh-border: #E5E7EB;
+
+  /* Spacing & Radius */
+  --nh-radius: 12px;
+  --nh-radius-sm: 8px;
+  --nh-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --nh-shadow-lg: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
+  --nh-shadow-glow: 0 0 20px rgba(59,130,246,0.15);
+
+  /* Transitions */
+  --nh-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode overrides */
+.dark {
+  --nh-bg: #0F172A;
+  --nh-bg-card: #1E293B;
+  --nh-bg-elevated: #334155;
+  --nh-text: #F1F5F9;
+  --nh-text-secondary: #94A3B8;
+  --nh-border: #334155;
+  --nh-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --nh-shadow-lg: 0 10px 25px rgba(0,0,0,0.4), 0 4px 10px rgba(0,0,0,0.2);
+  --nh-shadow-glow: 0 0 30px rgba(59,130,246,0.25);
+}
