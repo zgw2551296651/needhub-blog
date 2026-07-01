@@ -8,8 +8,8 @@ export default defineConfig({
   // GitHub Pages base path (change to your repo name)
   base: '/needhub-blog/',
 
-  // Enable dark mode by default
-  appearance: 'dark',
+  // Default to light mode (white background)
+  appearance: 'light',
 
   themeConfig: {
     // Site logo
@@ -23,9 +23,14 @@ export default defineConfig({
       {
         text: '分类',
         items: [
-          { text: '技术分享', link: '/blog/?category=tech' },
-          { text: '软件推荐', link: '/blog/?category=software' },
-          { text: '学习笔记', link: '/blog/?category=notes' }
+          { text: 'Java核心', link: '/blog/?category=java-core' },
+          { text: '数据库', link: '/blog/?category=database' },
+          { text: '框架中间件', link: '/blog/?category=middleware' },
+          { text: '分布式架构', link: '/blog/?category=distributed' },
+          { text: '基础内功', link: '/blog/?category=fundamentals' },
+          { text: '方案设计', link: '/blog/?category=design' },
+          { text: 'AI大模型', link: '/blog/?category=ai-models' },
+          { text: '软件推荐', link: '/blog/?category=software' }
         ]
       }
     ],
@@ -91,48 +96,43 @@ export default defineConfig({
     sidebar: {
       '/blog/posts/': [
         {
-          text: '文章列表',
+          text: 'Java核心',
           items: [
             { text: '你好，世界 — 欢迎来到 NeedHub', link: '/blog/posts/hello-world' },
-            { text: '2026 开发者必备工具', link: '/blog/posts/software-picks' }
-          ]
-        },
-        {
-          text: 'Java 学习笔记',
-          items: [
             { text: 'Java 面试准备全攻略', link: '/blog/posts/java-interview-guide' },
             { text: 'JVM 深度解析', link: '/blog/posts/jvm-deep-dive' },
             { text: 'Java 并发编程核心原理', link: '/blog/posts/java-concurrency' },
             { text: 'Java 集合框架源码分析', link: '/blog/posts/java-collections' },
-            { text: 'Spring 框架核心原理', link: '/blog/posts/spring-core-principles' },
             { text: 'Java 设计模式实战', link: '/blog/posts/java-design-patterns' }
           ]
         },
         {
-          text: 'MySQL 学习笔记',
+          text: '数据库',
           items: [
             { text: 'MySQL 索引深度解析', link: '/blog/posts/mysql-index-deep-dive' },
             { text: 'MySQL 事务与锁机制', link: '/blog/posts/mysql-transaction-and-locks' },
-            { text: 'MySQL SQL 优化实战', link: '/blog/posts/mysql-sql-optimization' }
-          ]
-        },
-        {
-          text: 'Redis 学习笔记',
-          items: [
+            { text: 'MySQL SQL 优化实战', link: '/blog/posts/mysql-sql-optimization' },
             { text: 'Redis 核心数据结构与底层实现', link: '/blog/posts/redis-data-structures' },
             { text: 'Redis 持久化、集群与高可用', link: '/blog/posts/redis-persistence-and-cluster' },
             { text: 'Redis 分布式锁与缓存一致性', link: '/blog/posts/redis-distributed-lock-and-cache' }
           ]
         },
         {
-          text: '框架与中间件',
+          text: '框架中间件',
           items: [
+            { text: 'Spring 框架核心原理', link: '/blog/posts/spring-core-principles' },
             { text: 'MyBatis 核心原理与实战', link: '/blog/posts/mybatis-core-principles' },
             { text: 'SpringCloud 微服务架构全解析', link: '/blog/posts/springcloud-microservices' },
             { text: 'Kafka 消息队列深入解析', link: '/blog/posts/kafka-deep-dive' },
             { text: 'RocketMQ 原理与实战', link: '/blog/posts/rocketmq-principles' },
             { text: 'Elasticsearch 搜索引擎原理', link: '/blog/posts/elasticsearch-principles' },
             { text: 'Netty 网络编程核心原理', link: '/blog/posts/netty-core-principles' }
+          ]
+        },
+        {
+          text: '软件推荐',
+          items: [
+            { text: '2026 开发者必备工具', link: '/blog/posts/software-picks' }
           ]
         }
       ]

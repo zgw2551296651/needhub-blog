@@ -14,16 +14,16 @@ hero:
       link: /about/
 
 features:
-  - icon: 💻
-    title: 技术分享
-    details: 深入探讨编程、算法、系统设计，以及计算机科学领域的最新动态。
-    link: /blog/?category=tech
-  - icon: 🚀
-    title: 软件推荐
-    details: 精选高效实用的工具、应用和插件，助你提升开发效率与日常生产力。
-    link: /blog/?category=software
-  - icon: 📝
-    title: 学习笔记
-    details: 整理课程、书籍与论文的学习心得——从密码学到云计算，持续记录成长。
-    link: /blog/?category=notes
+  - icon: ☕
+    title: Java核心
+    details: 基础语法、集合、IO、并发、JVM——从面试备战到源码分析，构建扎实的 Java 知识体系。
+    link: /blog/?category=java-core
+  - icon: 🗄️
+    title: 数据库
+    details: MySQL 索引/事务/锁/SQL优化，Redis 数据结构/持久化/分布式锁——深入数据库底层原理。
+    link: /blog/?category=database
+  - icon: 🌐
+    title: 框架中间件
+    details: Spring、MyBatis、SpringCloud、Kafka、RocketMQ、ES、Netty——掌握主流框架的核心原理。
+    link: /blog/?category=middleware
 ---

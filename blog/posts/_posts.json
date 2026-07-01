@@ -5,7 +5,7 @@
       "title": "你好，世界 — 欢迎来到 NeedHub",
       "excerpt": "这是 NeedHub 的第一篇文章！在这里我将分享探索计算机科学的旅程、发现好用的软件，以及一路走来的学习心得。",
       "date": "2026-06-22",
-      "category": "tech",
+      "category": "java-core",
       "tags": ["入门", "博客", "开始"]
     },
     {
@@ -21,7 +21,7 @@
       "title": "Java 面试准备全攻略——从基础到 Offer",
       "excerpt": "全面解析 Java 面试的四大评估维度、简历优化技巧、投递时机与高频知识点，助你系统备战。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "java-core",
       "tags": ["Java", "面试", "求职", "简历"]
     },
     {
@@ -29,7 +29,7 @@
       "title": "JVM 深度解析——内存模型、垃圾回收与性能调优",
       "excerpt": "从类加载机制到 GC 算法，从内存区域划分到 JVM 调优实战，一文掌握 JVM 核心原理。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "java-core",
       "tags": ["Java", "JVM", "GC", "性能调优"]
     },
     {
@@ -37,7 +37,7 @@
       "title": "Java 并发编程核心原理——从线程到 JUC 全面解析",
       "excerpt": "深入 JMM、AQS、线程池、并发容器与 CompletableFuture，结合源码理解 Java 并发的方方面面。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "java-core",
       "tags": ["Java", "并发", "多线程", "JUC"]
     },
     {
@@ -45,7 +45,7 @@
       "title": "Java 集合框架源码深度分析——从 HashMap 到并发容器",
       "excerpt": "拆解 ArrayList、HashMap、ConcurrentHashMap 等核心集合的源码实现，理解设计背后的思考。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "java-core",
       "tags": ["Java", "集合", "HashMap", "源码"]
     },
     {
@@ -53,7 +53,7 @@
       "title": "Spring 框架核心原理详解——IOC、AOP 与 Bean 生命周期",
       "excerpt": "从 IOC 容器到 AOP 代理，从 Bean 生命周期到三级缓存解决循环依赖，深入 Spring 底层实现。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "middleware",
       "tags": ["Java", "Spring", "IOC", "AOP"]
     },
     {
@@ -61,7 +61,7 @@
       "title": "Java 设计模式实战——从原理到框架中的应用",
       "excerpt": "精选最常用的设计模式，结合 JDK 源码和 Spring 框架实例，理解模式在实际项目中的运用。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "java-core",
       "tags": ["Java", "设计模式", "SOLID", "架构"]
     },
     {
@@ -69,7 +69,7 @@
       "title": "MySQL 索引深度解析——B+Tree、索引类型与优化实战",
       "excerpt": "从 B+Tree 底层结构到聚簇索引，从联合索引最左前缀到索引失效的 9 种场景，全面掌握 MySQL 索引。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "database",
       "tags": ["MySQL", "索引", "B+Tree", "数据库"]
     },
     {
@@ -77,7 +77,7 @@
       "title": "MySQL 事务与锁机制——ACID、MVCC 与死锁防治",
       "excerpt": "深入 ACID 实现原理、MVCC 版本链与 ReadView、行级锁与 Next-Key Lock，掌握事务并发控制的核心。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "database",
       "tags": ["MySQL", "事务", "MVCC", "锁", "数据库"]
     },
     {
@@ -85,7 +85,7 @@
       "title": "MySQL SQL 优化实战——执行计划、慢查询与性能调优",
       "excerpt": "详解 EXPLAIN 12 个字段、JOIN 与 ORDER BY 优化、深度分页解决方案，提升 SQL 查询性能。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "database",
       "tags": ["MySQL", "SQL优化", "EXPLAIN", "性能调优"]
     },
     {
@@ -93,7 +93,7 @@
       "title": "Redis 核心数据结构与底层实现——从 SDS 到 SkipList",
       "excerpt": "拆解 String/Hash/List/Set/ZSet 五大类型的底层实现，理解 SDS、渐进式 Rehash 和跳表的设计精髓。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "database",
       "tags": ["Redis", "数据结构", "SDS", "SkipList"]
     },
     {
@@ -101,7 +101,7 @@
       "title": "Redis 持久化、集群架构与高可用方案",
       "excerpt": "从 RDB/AOF 持久化到主从/哨兵/Cluster 三种集群架构，掌握 Redis 生产环境的数据安全与高可用设计。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "database",
       "tags": ["Redis", "持久化", "集群", "高可用"]
     },
     {
@@ -109,7 +109,7 @@
       "title": "Redis 分布式锁与缓存一致性——Redisson 实战指南",
       "excerpt": "深入 Redisson 分布式锁原理、WatchDog 续期机制、RedLock 争议，以及缓存与数据库一致性方案。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "database",
       "tags": ["Redis", "分布式锁", "Redisson", "缓存一致性"]
     },
     {
@@ -117,7 +117,7 @@
       "title": "MyBatis 核心原理与实战——从 MapperProxy 到缓存机制",
       "excerpt": "深入 MapperProxy 代理、三种 Executor、一级/二级缓存、动态 SQL，以及 MyBatis-Plus 增强特性。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "middleware",
       "tags": ["MyBatis", "ORM", "缓存", "框架"]
     },
     {
@@ -125,7 +125,7 @@
       "title": "SpringCloud 微服务架构全解析——从注册中心到服务治理",
       "excerpt": "从 Eureka/Nacos 注册中心到 Feign/Gateway/Ribbon，全面理解微服务架构的核心组件与生产实践。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "middleware",
       "tags": ["SpringCloud", "微服务", "Nacos", "分布式"]
     },
     {
@@ -133,7 +133,7 @@
       "title": "Kafka 消息队列深入解析——架构、可靠性与性能调优",
       "excerpt": "深入 Kafka 分区机制、ISR 管理、零拷贝存储、消息可靠性保障，以及吞吐量提升数十倍的调优策略。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "middleware",
       "tags": ["Kafka", "消息队列", "分布式", "高吞吐"]
     },
     {
@@ -141,7 +141,7 @@
       "title": "RocketMQ 原理与实战——架构设计、消息可靠性与消费模式",
       "excerpt": "从四大角色架构到同步刷盘+同步复制的金融级方案，深入 RocketMQ 消息可靠性的全链路保障。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "middleware",
       "tags": ["RocketMQ", "消息队列", "分布式", "可靠性"]
     },
     {
@@ -149,7 +149,7 @@
       "title": "Elasticsearch 搜索引擎原理——倒排索引、集群架构与性能优化",
       "excerpt": "从倒排索引压缩编码到热温冷分层存储，从分片策略到深度分页优化，全面掌握 ES 的核心原理与调优。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "middleware",
       "tags": ["Elasticsearch", "搜索引擎", "倒排索引", "分布式"]
     },
     {
@@ -157,7 +157,7 @@
       "title": "Netty 网络编程核心原理——线程模型、零拷贝与高性能设计",
       "excerpt": "从 NIO 基础到主从 Reactor 多线程模型，从五种零拷贝技术到 Pipeline 责任链，理解 Netty 高性能的奥秘。",
       "date": "2026-06-30",
-      "category": "notes",
+      "category": "middleware",
       "tags": ["Netty", "NIO", "网络编程", "高性能"]
     }
   ]

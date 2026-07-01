@@ -1,5 +1,6 @@
 /* ============================================
    NeedHub — CSS Variables (Design Tokens)
+   Light-first design, white background
    ============================================ */
 
 :root {
@@ -7,22 +8,27 @@
   --nh-brand: #3B82F6;
   --nh-brand-light: #60A5FA;
   --nh-brand-dark: #2563EB;
-  --nh-brand-glow: rgba(59, 130, 246, 0.15);
+  --nh-brand-glow: rgba(59, 130, 246, 0.10);
 
   /* Accent gradient */
   --nh-gradient: linear-gradient(135deg, #3B82F6, #06B6D4);
   --nh-gradient-hover: linear-gradient(135deg, #2563EB, #0891B2);
 
   /* Category colors */
-  --nh-tech: #3B82F6;
-  --nh-software: #10B981;
-  --nh-notes: #F59E0B;
+  --nh-java-core: #EF4444;
+  --nh-database: #3B82F6;
+  --nh-middleware: #6366F1;
+  --nh-distributed: #10B981;
+  --nh-fundamentals: #F59E0B;
+  --nh-design: #8B5CF6;
+  --nh-ai-models: #F97316;
+  --nh-software: #06B6D4;
 
-  /* Neutral palette (light) */
-  --nh-bg: #FAFBFC;
+  /* Neutral palette (light — white background, black text) */
+  --nh-bg: #FFFFFF;
   --nh-bg-card: #FFFFFF;
-  --nh-bg-elevated: #F3F4F6;
-  --nh-text: #1F2937;
+  --nh-bg-elevated: #F9FAFB;
+  --nh-text: #111827;
   --nh-text-secondary: #6B7280;
   --nh-border: #E5E7EB;
 
@@ -31,7 +37,7 @@
   --nh-radius-sm: 8px;
   --nh-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
   --nh-shadow-lg: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
-  --nh-shadow-glow: 0 0 20px rgba(59,130,246,0.15);
+  --nh-shadow-glow: 0 0 20px rgba(59,130,246,0.12);
 
   /* Transitions */
   --nh-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);

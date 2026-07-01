@@ -38,9 +38,14 @@ const props = defineProps({
 })
 
 const categoryMap = {
-  tech: { label: '技术分享', color: '#3B82F6' },
-  software: { label: '软件推荐', color: '#10B981' },
-  notes: { label: '学习笔记', color: '#F59E0B' }
+  'java-core': { label: 'Java核心', color: '#EF4444' },
+  database: { label: '数据库', color: '#3B82F6' },
+  middleware: { label: '框架中间件', color: '#6366F1' },
+  distributed: { label: '分布式架构', color: '#10B981' },
+  fundamentals: { label: '基础内功', color: '#F59E0B' },
+  design: { label: '方案设计', color: '#8B5CF6' },
+  'ai-models': { label: 'AI大模型', color: '#F97316' },
+  software: { label: '软件推荐', color: '#06B6D4' }
 }
 
 const postUrl = computed(() => withBase(`/blog/posts/${props.post.slug}`))

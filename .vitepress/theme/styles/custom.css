@@ -13,10 +13,21 @@
   --vp-home-hero-name-background: linear-gradient(135deg, #3B82F6, #06B6D4);
   --vp-home-hero-image-background-image: radial-gradient(
     ellipse at 50% 0%,
-    rgba(59, 130, 246, 0.18) 0%,
+    rgba(59, 130, 246, 0.12) 0%,
     transparent 60%
   );
   --vp-home-hero-image-filter: blur(80px);
+
+  /* Light mode: pure white background, dark text */
+  --vp-c-bg: #FFFFFF;
+  --vp-c-bg-alt: #F9FAFB;
+  --vp-c-bg-soft: #F3F4F6;
+  --vp-c-bg-elv: #FFFFFF;
+  --vp-c-text-1: #111827;
+  --vp-c-text-2: #4B5563;
+  --vp-c-text-3: #9CA3AF;
+  --vp-c-border: #E5E7EB;
+  --vp-c-divider: #F3F4F6;
 }
 
 .dark {
@@ -133,8 +144,8 @@ html {
   width: 100%;
   height: 100%;
   background-image:
-    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
   background-size: 60px 60px;
   pointer-events: none;
   z-index: -1;
