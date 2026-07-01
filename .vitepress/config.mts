@@ -8,8 +8,8 @@ export default defineConfig({
   // GitHub Pages base path (change to your repo name)
   base: '/needhub-blog/',
 
-  // Default to light mode (white background)
-  appearance: 'light',
+  // Disable dark mode — force light/white theme
+  appearance: false,
 
   themeConfig: {
     // Site logo
