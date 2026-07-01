@@ -96,6 +96,17 @@ export default defineConfig({
             { text: '你好，世界 — 欢迎来到 NeedHub', link: '/blog/posts/hello-world' },
             { text: '2026 开发者必备工具', link: '/blog/posts/software-picks' }
           ]
+        },
+        {
+          text: 'Java 学习笔记',
+          items: [
+            { text: 'Java 面试准备全攻略', link: '/blog/posts/java-interview-guide' },
+            { text: 'JVM 深度解析', link: '/blog/posts/jvm-deep-dive' },
+            { text: 'Java 并发编程核心原理', link: '/blog/posts/java-concurrency' },
+            { text: 'Java 集合框架源码分析', link: '/blog/posts/java-collections' },
+            { text: 'Spring 框架核心原理', link: '/blog/posts/spring-core-principles' },
+            { text: 'Java 设计模式实战', link: '/blog/posts/java-design-patterns' }
+          ]
         }
       ]
     }

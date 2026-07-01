@@ -15,6 +15,54 @@
       "date": "2026-06-22",
       "category": "software",
       "tags": ["工具", "效率", "开发者"]
+    },
+    {
+      "slug": "java-interview-guide",
+      "title": "Java 面试准备全攻略——从基础到 Offer",
+      "excerpt": "全面解析 Java 面试的四大评估维度、简历优化技巧、投递时机与高频知识点，助你系统备战。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Java", "面试", "求职", "简历"]
+    },
+    {
+      "slug": "jvm-deep-dive",
+      "title": "JVM 深度解析——内存模型、垃圾回收与性能调优",
+      "excerpt": "从类加载机制到 GC 算法，从内存区域划分到 JVM 调优实战，一文掌握 JVM 核心原理。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Java", "JVM", "GC", "性能调优"]
+    },
+    {
+      "slug": "java-concurrency",
+      "title": "Java 并发编程核心原理——从线程到 JUC 全面解析",
+      "excerpt": "深入 JMM、AQS、线程池、并发容器与 CompletableFuture，结合源码理解 Java 并发的方方面面。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Java", "并发", "多线程", "JUC"]
+    },
+    {
+      "slug": "java-collections",
+      "title": "Java 集合框架源码深度分析——从 HashMap 到并发容器",
+      "excerpt": "拆解 ArrayList、HashMap、ConcurrentHashMap 等核心集合的源码实现，理解设计背后的思考。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Java", "集合", "HashMap", "源码"]
+    },
+    {
+      "slug": "spring-core-principles",
+      "title": "Spring 框架核心原理详解——IOC、AOP 与 Bean 生命周期",
+      "excerpt": "从 IOC 容器到 AOP 代理，从 Bean 生命周期到三级缓存解决循环依赖，深入 Spring 底层实现。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Java", "Spring", "IOC", "AOP"]
+    },
+    {
+      "slug": "java-design-patterns",
+      "title": "Java 设计模式实战——从原理到框架中的应用",
+      "excerpt": "精选最常用的设计模式，结合 JDK 源码和 Spring 框架实例，理解模式在实际项目中的运用。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Java", "设计模式", "SOLID", "架构"]
     }
   ]
 }
