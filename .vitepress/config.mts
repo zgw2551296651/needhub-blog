@@ -107,6 +107,33 @@ export default defineConfig({
             { text: 'Spring 框架核心原理', link: '/blog/posts/spring-core-principles' },
             { text: 'Java 设计模式实战', link: '/blog/posts/java-design-patterns' }
           ]
+        },
+        {
+          text: 'MySQL 学习笔记',
+          items: [
+            { text: 'MySQL 索引深度解析', link: '/blog/posts/mysql-index-deep-dive' },
+            { text: 'MySQL 事务与锁机制', link: '/blog/posts/mysql-transaction-and-locks' },
+            { text: 'MySQL SQL 优化实战', link: '/blog/posts/mysql-sql-optimization' }
+          ]
+        },
+        {
+          text: 'Redis 学习笔记',
+          items: [
+            { text: 'Redis 核心数据结构与底层实现', link: '/blog/posts/redis-data-structures' },
+            { text: 'Redis 持久化、集群与高可用', link: '/blog/posts/redis-persistence-and-cluster' },
+            { text: 'Redis 分布式锁与缓存一致性', link: '/blog/posts/redis-distributed-lock-and-cache' }
+          ]
+        },
+        {
+          text: '框架与中间件',
+          items: [
+            { text: 'MyBatis 核心原理与实战', link: '/blog/posts/mybatis-core-principles' },
+            { text: 'SpringCloud 微服务架构全解析', link: '/blog/posts/springcloud-microservices' },
+            { text: 'Kafka 消息队列深入解析', link: '/blog/posts/kafka-deep-dive' },
+            { text: 'RocketMQ 原理与实战', link: '/blog/posts/rocketmq-principles' },
+            { text: 'Elasticsearch 搜索引擎原理', link: '/blog/posts/elasticsearch-principles' },
+            { text: 'Netty 网络编程核心原理', link: '/blog/posts/netty-core-principles' }
+          ]
         }
       ]
     }

@@ -63,6 +63,102 @@
       "date": "2026-06-30",
       "category": "notes",
       "tags": ["Java", "设计模式", "SOLID", "架构"]
+    },
+    {
+      "slug": "mysql-index-deep-dive",
+      "title": "MySQL 索引深度解析——B+Tree、索引类型与优化实战",
+      "excerpt": "从 B+Tree 底层结构到聚簇索引，从联合索引最左前缀到索引失效的 9 种场景，全面掌握 MySQL 索引。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["MySQL", "索引", "B+Tree", "数据库"]
+    },
+    {
+      "slug": "mysql-transaction-and-locks",
+      "title": "MySQL 事务与锁机制——ACID、MVCC 与死锁防治",
+      "excerpt": "深入 ACID 实现原理、MVCC 版本链与 ReadView、行级锁与 Next-Key Lock，掌握事务并发控制的核心。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["MySQL", "事务", "MVCC", "锁", "数据库"]
+    },
+    {
+      "slug": "mysql-sql-optimization",
+      "title": "MySQL SQL 优化实战——执行计划、慢查询与性能调优",
+      "excerpt": "详解 EXPLAIN 12 个字段、JOIN 与 ORDER BY 优化、深度分页解决方案，提升 SQL 查询性能。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["MySQL", "SQL优化", "EXPLAIN", "性能调优"]
+    },
+    {
+      "slug": "redis-data-structures",
+      "title": "Redis 核心数据结构与底层实现——从 SDS 到 SkipList",
+      "excerpt": "拆解 String/Hash/List/Set/ZSet 五大类型的底层实现，理解 SDS、渐进式 Rehash 和跳表的设计精髓。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Redis", "数据结构", "SDS", "SkipList"]
+    },
+    {
+      "slug": "redis-persistence-and-cluster",
+      "title": "Redis 持久化、集群架构与高可用方案",
+      "excerpt": "从 RDB/AOF 持久化到主从/哨兵/Cluster 三种集群架构，掌握 Redis 生产环境的数据安全与高可用设计。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Redis", "持久化", "集群", "高可用"]
+    },
+    {
+      "slug": "redis-distributed-lock-and-cache",
+      "title": "Redis 分布式锁与缓存一致性——Redisson 实战指南",
+      "excerpt": "深入 Redisson 分布式锁原理、WatchDog 续期机制、RedLock 争议，以及缓存与数据库一致性方案。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Redis", "分布式锁", "Redisson", "缓存一致性"]
+    },
+    {
+      "slug": "mybatis-core-principles",
+      "title": "MyBatis 核心原理与实战——从 MapperProxy 到缓存机制",
+      "excerpt": "深入 MapperProxy 代理、三种 Executor、一级/二级缓存、动态 SQL，以及 MyBatis-Plus 增强特性。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["MyBatis", "ORM", "缓存", "框架"]
+    },
+    {
+      "slug": "springcloud-microservices",
+      "title": "SpringCloud 微服务架构全解析——从注册中心到服务治理",
+      "excerpt": "从 Eureka/Nacos 注册中心到 Feign/Gateway/Ribbon，全面理解微服务架构的核心组件与生产实践。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["SpringCloud", "微服务", "Nacos", "分布式"]
+    },
+    {
+      "slug": "kafka-deep-dive",
+      "title": "Kafka 消息队列深入解析——架构、可靠性与性能调优",
+      "excerpt": "深入 Kafka 分区机制、ISR 管理、零拷贝存储、消息可靠性保障，以及吞吐量提升数十倍的调优策略。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Kafka", "消息队列", "分布式", "高吞吐"]
+    },
+    {
+      "slug": "rocketmq-principles",
+      "title": "RocketMQ 原理与实战——架构设计、消息可靠性与消费模式",
+      "excerpt": "从四大角色架构到同步刷盘+同步复制的金融级方案，深入 RocketMQ 消息可靠性的全链路保障。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["RocketMQ", "消息队列", "分布式", "可靠性"]
+    },
+    {
+      "slug": "elasticsearch-principles",
+      "title": "Elasticsearch 搜索引擎原理——倒排索引、集群架构与性能优化",
+      "excerpt": "从倒排索引压缩编码到热温冷分层存储，从分片策略到深度分页优化，全面掌握 ES 的核心原理与调优。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Elasticsearch", "搜索引擎", "倒排索引", "分布式"]
+    },
+    {
+      "slug": "netty-core-principles",
+      "title": "Netty 网络编程核心原理——线程模型、零拷贝与高性能设计",
+      "excerpt": "从 NIO 基础到主从 Reactor 多线程模型，从五种零拷贝技术到 Pipeline 责任链，理解 Netty 高性能的奥秘。",
+      "date": "2026-06-30",
+      "category": "notes",
+      "tags": ["Netty", "NIO", "网络编程", "高性能"]
     }
   ]
 }
