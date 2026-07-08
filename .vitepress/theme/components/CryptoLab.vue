@@ -11,7 +11,7 @@ let iframe = null
 onMounted(() => {
 	if (!container.value) return
 	iframe = document.createElement('iframe')
-	iframe.src = '/needhub-blog/crypto-lab.html'
+	iframe.src = '/needhub-blog/crypto-lab-app.html'
 	iframe.style.cssText = 'width:100%;height:calc(100vh - 64px);border:none;display:block;'
 	container.value.appendChild(iframe)
 })
