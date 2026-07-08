@@ -20,6 +20,7 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '博客', link: '/blog/' },
       { text: '关于', link: '/about/' },
+      { text: '加密实验室', link: '/crypto-lab' },
       {
         text: '分类',
         items: [
