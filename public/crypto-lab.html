@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>加密算法可视化实验室</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0b0e14;--bg2:#131720;--bg3:#1a1f2e;--border:#2a3040;--text:#e0e6f0;--text2:#8892a8;--accent:#3b82f6;--green:#22c55e;--red:#ef4444;--orange:#f59e0b;--purple:#a855f7;--cyan:#06b6d4;--pink:#ec4899}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+/* Header */
+header{background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:16px;flex-shrink:0}
+header h1{font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+header p{color:var(--text2);font-size:13px}
+/* Layout */
+.app{display:flex;flex:1;overflow:hidden}
+/* Sidebar */
+.sidebar{width:220px;background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;padding:8px}
+.sidebar .cat{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;padding:12px 12px 4px;font-weight:600}
+.sidebar .item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:all .2s;font-size:13.5px;color:var(--text2);margin:2px 0}
+.sidebar .item:hover{background:var(--bg3);color:var(--text)}
+.sidebar .item.active{background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(6,182,212,.1));color:var(--accent);border:1px solid rgba(59,130,246,.3)}
+.sidebar .item .icon{font-size:18px;width:24px;text-align:center}
+/* Main */
+main{flex:1;overflow-y:auto;padding:24px 32px}
+.module{display:none}
+.module.active{display:block}
+.module h2{font-size:22px;margin-bottom:4px}
+.module .desc{color:var(--text2);font-size:13.5px;line-height:1.6;margin-bottom:20px;max-width:720px}
+/* Cards */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.card h3{font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h3 .tag{font-size:11px;background:rgba(59,130,246,.15);color:var(--accent);padding:2px 8px;border-radius:4px;font-weight:500}
+/* Form */
+label{font-size:12.5px;color:var(--text2);display:block;margin-bottom:4px}
+input[type=text],input[type=number],input[type=password],textarea,select{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13.5px;width:100%;outline:none;transition:border-color .2s;font-family:inherit}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+textarea{resize:vertical;min-height:60px}
+.btn{padding:8px 18px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#2563eb}
+.btn-success{background:var(--green);color:#fff}.btn-success:hover{background:#16a34a}
+.btn-danger{background:var(--red);color:#fff}.btn-danger:hover{background:#dc2626}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text2)}.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-sm{padding:5px 12px;font-size:12px}
+.row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.row>*{flex:1;min-width:0}
+.row>.auto{flex:none;width:auto}
+.mt{margin-top:12px}.mb{margin-bottom:12px}
+/* Output */
+.output{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:'Cascadia Code','Fira Code',monospace;font-size:12.5px;word-break:break-all;line-height:1.7;min-height:40px;max-height:600px;overflow-y:auto;white-space:pre-wrap}
+.output .key{color:var(--text2)}.output .val{color:var(--cyan)}
+.output .ok{color:var(--green)}.output .fail{color:var(--red)}
+.output .hl{color:var(--orange)}
+/* Flow */
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:16px 0}
+.flow-step{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-align:center;font-size:12px;position:relative;min-width:100px}
+.flow-step.done{border-color:var(--green);background:rgba(34,197,94,.08)}
+.flow-step.active{border-color:var(--accent);background:rgba(59,130,246,.08);animation:pulse 1s infinite}
+.flow-arrow{color:var(--text2);font-size:20px}
+.flow-step .step-title{font-weight:600;color:var(--text);margin-bottom:2px}
+.flow-step .step-detail{color:var(--text2);font-size:11px}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.3)}50%{box-shadow:0 0 0 6px rgba(59,130,246,0)}}
+/* Badge */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-green{background:rgba(34,197,94,.15);color:var(--green)}
+.badge-red{background:rgba(239,68,68,.15);color:var(--red)}
+.badge-blue{background:rgba(59,130,246,.15);color:var(--accent)}
+/* Share cards */
+.share-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:inline-block;margin:4px;cursor:pointer;transition:all .2s;font-family:monospace;font-size:12.5px}
+.share-card:hover{border-color:var(--cyan)}
+.share-card.selected{border-color:var(--accent);background:rgba(59,130,246,.1)}
+/* ABE Tree */
+.tree-node{display:inline-flex;flex-direction:column;align-items:center;gap:4px}
+.tree-node .node-box{border:2px solid var(--border);border-radius:8px;padding:6px 14px;font-size:12.5px;font-weight:600;text-align:center;transition:all .3s;min-width:60px}
+.tree-node .node-box.and{border-color:var(--orange);color:var(--orange)}
+.tree-node .node-box.or{border-color:var(--purple);color:var(--purple)}
+.tree-node .node-box.attr{border-color:var(--cyan);color:var(--cyan)}
+.tree-node .node-box.satisfied{background:rgba(34,197,94,.15)!important;border-color:var(--green)!important;color:var(--green)!important}
+.tree-node .node-box.denied{background:rgba(239,68,68,.1)!important;border-color:var(--red)!important;color:var(--red)!important}
+.tree-children{display:flex;gap:20px;justify-content:center;position:relative;padding-top:16px}
+.tree-children::before{content:'';position:absolute;top:0;left:50%;width:1px;height:16px;background:var(--border)}
+.tree-line{width:1px;height:12px;background:var(--border);margin:0 auto}
+.tree-wrap{display:flex;flex-direction:column;align-items:center}
+.tree-branch{display:flex;gap:20px;justify-content:center}
+.tree-branch>.tree-wrap{position:relative}
+.tree-branch>.tree-wrap::before{content:'';position:absolute;top:-12px;left:50%;width:1px;height:12px;background:var(--border)}
+.user-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin:6px;display:inline-block;min-width:180px;vertical-align:top}
+.user-card .uname{font-weight:700;font-size:14px;margin-bottom:6px}
+.user-card .attrs{display:flex;flex-wrap:wrap;gap:4px}
+.user-card .attr-tag{font-size:11px;padding:2px 8px;border-radius:4px;background:rgba(6,182,212,.12);color:var(--cyan)}
+.attr-tag-input{display:inline-flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:4px 10px;margin:3px;font-size:12px;cursor:pointer;transition:all .2s}
+.attr-tag-input:hover{border-color:var(--accent)}
+.attr-tag-input.checked{background:rgba(59,130,246,.12);border-color:var(--accent);color:var(--accent)}
+/* Grid */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+/* Compare */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.compare .col h4{font-size:13px;margin-bottom:8px;color:var(--text2)}
+/* Avalanche */
+.bit-grid{display:flex;flex-wrap:wrap;gap:1px;margin:8px 0}
+.bit{width:14px;height:14px;border-radius:2px;font-size:8px;display:flex;align-items:center;justify-content:center;color:transparent}
+.bit.b0{background:#1a1f2e}.bit.b1{background:var(--accent)}.bit.diff{background:var(--red)}
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+/* ZKP */
+.zkp-msg{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin:8px 0;font-size:13px;display:flex;align-items:center;gap:8px}
+.zkp-msg .dir{font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px}
+.zkp-msg .dir.p2v{background:rgba(59,130,246,.15);color:var(--accent)}
+.zkp-msg .dir.v2p{background:rgba(168,85,247,.15);color:var(--purple)}
+.zkp-msg .dir.result{background:rgba(34,197,94,.15);color:var(--green)}
+.zkp-msg .dir.fail{background:rgba(239,68,68,.15);color:var(--red)}
+/* Policy builder */
+.policy-row{display:flex;align-items:center;gap:8px;margin:4px 0}
+.policy-row select,.policy-row input{width:auto;flex:none}
+</style>
+</head>
+<body>
+
+<header>
+  <div style="font-size:28px">🔐</div>
+  <div>
+    <h1>加密算法可视化实验室</h1>
+    <p>区块链安全研究 — 交互式加密算法演示平台</p>
+  </div>
+</header>
+
+<div class="app">
+  <nav class="sidebar" id="sidebar">
+    <div class="cat">基础加密</div>
+    <div class="item active" data-mod="aes"><span class="icon">🔑</span>AES 对称加密</div>
+    <div class="item" data-mod="rsa"><span class="icon">🔒</span>RSA 非对称加密</div>
+    <div class="item" data-mod="hash"><span class="icon">#️⃣</span>哈希函数</div>
+    <div class="cat">数字签名</div>
+    <div class="item" data-mod="sign"><span class="icon">✍️</span>ECDSA 签名</div>
+    <div class="cat">秘密共享</div>
+    <div class="item" data-mod="shamir"><span class="icon">🧩</span>Shamir 秘密共享</div>
+    <div class="cat">高级加密</div>
+    <div class="item" data-mod="paillier"><span class="icon">🔮</span>Paillier 同态加密</div>
+    <div class="item" data-mod="abe"><span class="icon">🏷️</span>属性加密 ABE</div>
+    <div class="item" data-mod="zkp"><span class="icon">🎭</span>零知识证明</div>
+  </nav>
+
+  <main id="main">
+
+    <!-- ===================== AES ===================== -->
+    <div class="module active" id="mod-aes">
+      <h2>AES-256-GCM 对称加密</h2>
+      <p class="desc">AES（高级加密标准）是目前最广泛使用的对称加密算法。GCM 模式同时提供加密和认证，适合区块链交易数据的加密保护。发送方和接收方使用相同的密钥。</p>
+      <div class="flow" id="aes-flow">
+        <div class="flow-step" id="aes-s1"><div class="step-title">明文输入</div><div class="step-detail">原始数据</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step" id="aes-s2"><div class="step-title">密钥派生</div><div class="step-detail">PBKDF2</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step" id="aes-s3"><div class="step-title">AES-GCM 加密</div><div class="step-detail">256-bit</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step" id="aes-s4"><div class="step-title">密文 + 标签</div><div class="step-detail">认证加密</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3>🔒 加密 <span class="tag">Encrypt</span></h3>
+          <div class="mb"><label>明文内容</label><textarea id="aes-plain" rows="2">区块链安全研究，加密算法可视化</textarea></div>
+          <div class="mb"><label>密码 (用于派生密钥)</label><input type="text" id="aes-pwd" value="MySecretKey2024"></div>
+          <button class="btn btn-primary" onclick="aesEncrypt()">加密 →</button>
+          <div class="mt"><label>加密过程输出</label><div class="output" id="aes-enc-out">等待加密...</div></div>
+        </div>
+        <div class="card">
+          <h3>🔓 解密 <span class="tag">Decrypt</span></h3>
+          <div class="mb"><label>密文 (自动填入)</label><textarea id="aes-cipher" rows="2" placeholder="加密后自动填入"></textarea></div>
+          <div class="mb"><label>密码</label><input type="text" id="aes-pwd2" value="MySecretKey2024"></div>
+          <div class="row">
+            <button class="btn btn-success" onclick="aesDecrypt()">← 解密</button>
+            <button class="btn btn-danger btn-sm" onclick="aesDecryptWrong()">用错误密码解密</button>
+          </div>
+          <div class="mt"><label>解密结果</label><div class="output" id="aes-dec-out">等待解密...</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== RSA ===================== -->
+    <div class="module" id="mod-rsa">
+      <h2>RSA 非对称加密</h2>
+      <p class="desc">RSA 基于大数分解难题，使用公钥加密、私钥解密。在区块链中广泛用于数字证书、密钥交换和签名。下方演示使用较小素数以便观察数学过程。</p>
+      <div class="flow" id="rsa-flow">
+        <div class="flow-step"><div class="step-title">素数生成</div><div class="step-detail">p, q</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">密钥计算</div><div class="step-detail">n=pq, φ(n), e, d</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">公钥加密</div><div class="step-detail">c = m<sup>e</sup> mod n</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">私钥解密</div><div class="step-detail">m = c<sup>d</sup> mod n</div></div>
+      </div>
+      <div class="card">
+        <h3>🔧 密钥生成 <span class="tag">KeyGen</span></h3>
+        <div class="row mb">
+          <div><label>素数 p</label><input type="number" id="rsa-p" value="61"></div>
+          <div><label>素数 q</label><input type="number" id="rsa-q" value="53"></div>
+          <div class="auto"><button class="btn btn-primary" onclick="rsaGen()">生成密钥对</button></div>
+          <div class="auto"><button class="btn btn-outline btn-sm" onclick="rsaGenRandom()">随机生成</button></div>
+        </div>
+        <div class="output" id="rsa-key-out">点击"生成密钥对"查看 RSA 数学过程</div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3>🔒 公钥加密</h3>
+          <div class="mb"><label>明文数字 m (须 &lt; n)</label><input type="number" id="rsa-m" value="42"></div>
+          <button class="btn btn-primary" onclick="rsaEncrypt()">用公钥加密</button>
+          <div class="mt output" id="rsa-enc-out">等待加密...</div>
+        </div>
+        <div class="card">
+          <h3>🔓 私钥解密</h3>
+          <div class="mb"><label>密文 c (自动填入)</label><input type="text" id="rsa-c" placeholder="加密后自动填入"></div>
+          <button class="btn btn-success" onclick="rsaDecrypt()">用私钥解密</button>
+          <div class="mt output" id="rsa-dec-out">等待解密...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== Hash ===================== -->
+    <div class="module" id="mod-hash">
+      <h2>哈希函数 &amp; 雪崩效应</h2>
+      <p class="desc">哈希函数将任意长度数据映射为固定长度摘要，具有不可逆、抗碰撞特性。雪崩效应指输入的微小变化导致输出完全不同——这是保证区块链数据完整性的基石。</p>
+      <div class="card">
+        <h3>🧪 实时哈希计算</h3>
+        <div class="mb"><label>输入文本</label><input type="text" id="hash-input1" value="Hello Blockchain" oninput="hashCalc()"></div>
+        <div class="grid3 mt" id="hash-results">
+          <div><label>SHA-256</label><div class="output" id="hash-sha256">-</div></div>
+          <div><label>SHA-384</label><div class="output" id="hash-sha384">-</div></div>
+          <div><label>SHA-512</label><div class="output" id="hash-sha512">-</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>❄️ 雪崩效应对比 <span class="tag">Avalanche Effect</span></h3>
+        <p class="desc" style="margin-bottom:12px">输入两个几乎相同的文本，观察哈希值的巨大差异。红色位表示不同。</p>
+        <div class="compare">
+          <div class="col">
+            <h4>输入 A</h4>
+            <input type="text" id="hash-a" value="Hello Blockchain" oninput="hashAvalanche()">
+            <label class="mt">SHA-256 哈希</label>
+            <div class="output" id="hash-a-out">-</div>
+            <label class="mt">二进制</label>
+            <div class="bit-grid" id="hash-a-bits"></div>
+          </div>
+          <div class="col">
+            <h4>输入 B (仅改一个字符)</h4>
+            <input type="text" id="hash-b" value="Hello Blockchaim" oninput="hashAvalanche()">
+            <label class="mt">SHA-256 哈希</label>
+            <div class="output" id="hash-b-out">-</div>
+            <label class="mt">二进制 (红色=不同位)</label>
+            <div class="bit-grid" id="hash-b-bits"></div>
+          </div>
+        </div>
+        <div class="mt" style="text-align:center">
+          <span class="badge badge-blue" id="hash-diff-pct">差异: -</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== ECDSA ===================== -->
+    <div class="module" id="mod-sign">
+      <h2>ECDSA 数字签名</h2>
+      <p class="desc">ECDSA（椭圆曲线数字签名算法）是比特币、以太坊的核心签名方案。签名者用私钥签名，任何人可用公钥验证。签名保证消息完整性和不可否认性。</p>
+      <div class="flow">
+        <div class="flow-step"><div class="step-title">生成密钥对</div><div class="step-detail">私钥 sk, 公钥 pk</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">签名</div><div class="step-detail">σ = Sign(sk, msg)</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">验证</div><div class="step-detail">Verify(pk, msg, σ)</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step" id="sign-result-step"><div class="step-title">结果</div><div class="step-detail">有效 / 无效</div></div>
+      </div>
+      <div class="card">
+        <h3>✍️ 签名过程</h3>
+        <div class="row mb">
+          <div style="flex:2"><label>消息内容</label><input type="text" id="sign-msg" value="转账: Alice → Bob, 10 ETH"></div>
+          <div class="auto"><button class="btn btn-primary" onclick="signGen()">1. 生成密钥</button></div>
+          <div class="auto"><button class="btn btn-primary" onclick="signDo()">2. 签名</button></div>
+        </div>
+        <div class="output" id="sign-key-out">点击"生成密钥"开始</div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3>✅ 正确验证</h3>
+          <div class="mb"><label>消息 (未篡改)</label><input type="text" id="sign-v-msg" value="转账: Alice → Bob, 10 ETH"></div>
+          <button class="btn btn-success" onclick="signVerify(false)">验证签名</button>
+          <div class="mt output" id="sign-v-out">等待验证...</div>
+        </div>
+        <div class="card">
+          <h3>❌ 篡改后验证</h3>
+          <div class="mb"><label>消息 (已篡改)</label><input type="text" id="sign-v-bad" value="转账: Alice → Eve, 99 ETH"></div>
+          <button class="btn btn-danger" onclick="signVerify(true)">用篡改消息验证</button>
+          <div class="mt output" id="sign-v-bad-out">等待验证...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== Shamir ===================== -->
+    <div class="module" id="mod-shamir">
+      <h2>Shamir 秘密共享</h2>
+      <p class="desc">Shamir (t, n) 门限方案：将秘密分成 n 份，任意 t 份可恢复，少于 t 份无法获得任何信息。基于拉格朗日插值定理。广泛用于门限钱包、分布式密钥管理。</p>
+      <div class="flow">
+        <div class="flow-step"><div class="step-title">秘密</div><div class="step-detail">S</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">多项式构造</div><div class="step-detail">f(0)=S, deg=t-1</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">生成份额</div><div class="step-detail">(i, f(i)) × n</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">选 t 份恢复</div><div class="step-detail">拉格朗日插值</div></div>
+      </div>
+      <div class="card">
+        <h3>🧩 分割秘密</h3>
+        <div class="row mb">
+          <div><label>秘密值 (整数)</label><input type="number" id="shr-secret" value="12345"></div>
+          <div><label>总份额 n</label><input type="number" id="shr-n" value="5" min="2" max="20"></div>
+          <div><label>门限 t</label><input type="number" id="shr-t" value="3" min="2" max="20"></div>
+          <div class="auto"><button class="btn btn-primary" onclick="shrSplit()">分割</button></div>
+        </div>
+        <div class="output" id="shr-poly-out">等待分割...</div>
+      </div>
+      <div class="card">
+        <h3>📦 份额 (点击选择用于恢复的份额)</h3>
+        <div id="shr-shares"></div>
+        <div class="mt"><button class="btn btn-success" onclick="shrRecover()">用选中份额恢复秘密</button></div>
+        <div class="mt output" id="shr-rec-out">选择至少 t 份后点击恢复</div>
+      </div>
+    </div>
+
+    <!-- ===================== Paillier ===================== -->
+    <div class="module" id="mod-paillier">
+      <h2>Paillier 同态加密</h2>
+      <p class="desc">Paillier 加密具有加法同态性质：在密文上直接做加法运算，解密后等于明文之和。这在区块链隐私交易中至关重要——可以在不解密的情况下计算余额。</p>
+      <div class="flow">
+        <div class="flow-step"><div class="step-title">明文 a, b</div><div class="step-detail">原始数据</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">分别加密</div><div class="step-detail">Enc(a), Enc(b)</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">密文运算</div><div class="step-detail">Enc(a) ⊕ Enc(b)</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">解密结果</div><div class="step-detail">Dec = a + b</div></div>
+      </div>
+      <div class="card">
+        <h3>🔑 密钥生成 <span class="tag">小素数演示</span></h3>
+        <div class="row mb">
+          <div><label>素数 p</label><input type="number" id="pai-p" value="101"></div>
+          <div><label>素数 q</label><input type="number" id="pai-q" value="103"></div>
+          <div class="auto"><button class="btn btn-primary" onclick="paiGen()">生成密钥</button></div>
+        </div>
+        <div class="output" id="pai-key-out">点击生成密钥开始</div>
+      </div>
+      <div class="card">
+        <h3>🔮 同态运算</h3>
+        <div class="row mb">
+          <div><label>明文 a</label><input type="number" id="pai-a" value="42"></div>
+          <div><label>明文 b</label><input type="number" id="pai-b" value="58"></div>
+          <div><label>运算</label><select id="pai-op"><option value="add">加法 (同态)</option><option value="mul">标量乘 (同态)</option></select></div>
+          <div class="auto"><button class="btn btn-primary" onclick="paiCompute()">计算</button></div>
+        </div>
+        <div class="output" id="pai-out">等待计算...</div>
+      </div>
+    </div>
+
+    <!-- ===================== ABE ===================== -->
+    <div class="module" id="mod-abe">
+      <h2>属性加密 (CP-ABE)</h2>
+      <p class="desc">密文策略属性加密 (CP-ABE)：加密时定义访问策略（属性树），只有属性满足策略的用户才能解密。适用于区块链上的细粒度访问控制。</p>
+      <div class="card">
+        <h3>🏷️ 第一步：定义属性宇宙</h3>
+        <div class="row mb">
+          <div style="flex:2"><input type="text" id="abe-new-attr" placeholder="输入新属性，如：教授"></div>
+          <div class="auto"><button class="btn btn-primary btn-sm" onclick="abeAddAttr()">添加</button></div>
+        </div>
+        <div id="abe-attrs" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+      </div>
+      <div class="card">
+        <h3>🌳 第二步：构造访问策略树</h3>
+        <p class="desc">构建一棵策略树。AND 节点要求所有子节点满足，OR 节点要求任一子节点满足。</p>
+        <div id="abe-policy-builder">
+          <div class="row mb">
+            <div><label>根节点类型</label>
+              <select id="abe-root-type"><option value="AND">AND (所有子节点必须满足)</option><option value="OR">OR (任一子节点满足)</option></select>
+            </div>
+            <div class="auto"><button class="btn btn-primary btn-sm" onclick="abeBuildTree()">构造策略树</button></div>
+          </div>
+          <div id="abe-children-builder"></div>
+        </div>
+        <div class="mt" style="display:flex;justify-content:center">
+          <div id="abe-tree-display"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>📝 第三步：加密消息</h3>
+        <div class="row mb">
+          <div style="flex:2"><label>要加密的消息</label><input type="text" id="abe-msg" value="机密文件：项目预算报告"></div>
+          <div class="auto"><button class="btn btn-primary" onclick="abeEncrypt()" style="margin-top:18px">加密</button></div>
+        </div>
+        <div class="output" id="abe-enc-out">构造策略树后加密</div>
+      </div>
+      <div class="card">
+        <h3>👤 第四步：添加用户并测试解密</h3>
+        <div class="row mb">
+          <div><label>用户名</label><input type="text" id="abe-uname" placeholder="Alice"></div>
+          <div class="auto"><button class="btn btn-primary btn-sm" onclick="abeAddUser()" style="margin-top:18px">添加用户</button></div>
+        </div>
+        <div class="mb"><label>为该用户分配属性 (点击切换)</label><div id="abe-user-attrs"></div></div>
+        <div id="abe-users" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+      </div>
+    </div>
+
+    <!-- ===================== ZKP ===================== -->
+    <div class="module" id="mod-zkp">
+      <h2>零知识证明 (Schnorr 协议)</h2>
+      <p class="desc">Schnorr 零知识证明协议：证明者向验证者证明自己知道某个秘密 x（离散对数），而不泄露 x 的任何信息。这是 zk-SNARK 和区块链身份认证的基础协议。</p>
+      <div class="flow">
+        <div class="flow-step"><div class="step-title">承诺</div><div class="step-detail">Prover → Verifier</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">挑战</div><div class="step-detail">Verifier → Prover</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><div class="step-title">响应</div><div class="step-detail">Prover → Verifier</div></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step" id="zkp-result"><div class="step-title">验证</div><div class="step-detail">等式检验</div></div>
+      </div>
+      <div class="card">
+        <h3>🎭 协议参数</h3>
+        <div class="row mb">
+          <div><label>大素数 p</label><input type="number" id="zkp-p" value="104729"></div>
+          <div><label>生成元 g</label><input type="number" id="zkp-g" value="3"></div>
+          <div><label>秘密 x (证明者私有)</label><input type="number" id="zkp-x" value="42"></div>
+          <div class="auto"><button class="btn btn-primary" onclick="zkpSetup()" style="margin-top:18px">设置</button></div>
+        </div>
+        <div class="output" id="zkp-setup-out">设置参数后执行协议</div>
+      </div>
+      <div class="card">
+        <h3>🔄 执行协议 (逐步)</h3>
+        <div class="row mb">
+          <div class="auto"><button class="btn btn-primary" onclick="zkpStep(1)">步骤1: 承诺</button></div>
+          <div class="auto"><button class="btn btn-primary" onclick="zkpStep(2)">步骤2: 挑战</button></div>
+          <div class="auto"><button class="btn btn-primary" onclick="zkpStep(3)">步骤3: 响应+验证</button></div>
+          <div class="auto"><button class="btn btn-danger btn-sm" onclick="zkpCheat()">作弊演示</button></div>
+          <div class="auto"><button class="btn btn-outline btn-sm" onclick="zkpReset()">重置</button></div>
+        </div>
+        <div id="zkp-log"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ==================== Navigation ====================
+const items = document.querySelectorAll('.sidebar .item');
+const modules = document.querySelectorAll('.module');
+items.forEach(it => it.addEventListener('click', () => {
+  items.forEach(i => i.classList.remove('active'));
+  it.classList.add('active');
+  const mod = it.dataset.mod;
+  modules.forEach(m => m.classList.remove('active'));
+  document.getElementById('mod-' + mod).classList.add('active');
+}));
+
+// ==================== Utility ====================
+function hex(buf) { return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join(''); }
+function bufToStr(buf) { return new TextDecoder().decode(buf); }
+function strToBuf(s) { return new TextEncoder().encode(s); }
+function el(id) { return document.getElementById(id); }
+function setFlow(prefix, step) {
+  for(let i=1;i<=4;i++){const e=el(prefix+'-s'+i);if(e){e.classList.remove('active','done');if(i<step)e.classList.add('done');else if(i===step)e.classList.add('active');}}
+}
+
+// ==================== AES ====================
+async function aesDeriveKey(pwd) {
+  const keyMat = await crypto.subtle.importKey('raw', strToBuf(pwd), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt:strToBuf('aes-demo-salt'), iterations:100000, hash:'SHA-256'}, keyMat, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+async function aesEncrypt() {
+  setFlow('aes',1);
+  const plain = el('aes-plain').value, pwd = el('aes-pwd').value;
+  await new Promise(r=>setTimeout(r,300)); setFlow('aes',2);
+  const key = await aesDeriveKey(pwd);
+  await new Promise(r=>setTimeout(r,300)); setFlow('aes',3);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, strToBuf(plain));
+  await new Promise(r=>setTimeout(r,300)); setFlow('aes',4);
+  const ctHex = hex(ct), ivHex = hex(iv);
+  el('aes-enc-out').innerHTML = `<span class="key">IV (nonce):</span> <span class="val">${ivHex}</span>\n<span class="key">密文 (hex):</span> <span class="val">${ctHex}</span>\n<span class="key">密文长度:</span> ${ct.byteLength} bytes (含16字节GCM认证标签)\n<span class="ok">✓ 加密成功</span>`;
+  el('aes-cipher').value = ivHex + '|' + ctHex;
+}
+async function aesDecrypt() {
+  const data = el('aes-cipher').value; if(!data) {el('aes-dec-out').innerHTML='<span class="fail">请先加密</span>';return;}
+  const [ivHex, ctHex] = data.split('|');
+  const iv = new Uint8Array(ivHex.match(/../g).map(h=>parseInt(h,16)));
+  const ct = new Uint8Array(ctHex.match(/../g).map(h=>parseInt(h,16)));
+  const pwd = el('aes-pwd2').value;
+  try {
+    const key = await aesDeriveKey(pwd);
+    const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, ct);
+    el('aes-dec-out').innerHTML = `<span class="key">解密结果:</span> <span class="ok">${bufToStr(pt)}</span>\n<span class="ok">✓ GCM认证通过，数据完整</span>`;
+  } catch(e) { el('aes-dec-out').innerHTML = `<span class="fail">✗ 解密失败: GCM认证标签不匹配</span>`; }
+}
+async function aesDecryptWrong() { el('aes-pwd2').value = 'WrongPassword!'; await aesDecrypt(); }
+
+// ==================== RSA ====================
+let rsaKeys = {};
+function modPow(base, exp, mod) { let r = 1n; base = base % mod; while(exp > 0n) { if(exp % 2n === 1n) r = r * base % mod; exp = exp / 2n; base = base * base % mod; } return r; }
+function isPrime(n) { if(n<2) return false; if(n<4) return true; if(n%2===0) return false; for(let i=3;i*i<=n;i+=2) if(n%i===0) return false; return true; }
+function extGcd(a,b) { if(b===0n) return [a,1n,0n]; const [g,x,y]=extGcd(b,a%b); return [g,y,x-a/b*y]; }
+function modInv(e,phi) { const [g,x]=extGcd(e,phi); return ((x%phi)+phi)%phi; }
+function rsaGen() {
+  const p=BigInt(el('rsa-p').value), q=BigInt(el('rsa-q').value);
+  if(!isPrime(Number(p))||!isPrime(Number(q))) { el('rsa-key-out').innerHTML='<span class="fail">p 和 q 必须是素数</span>'; return; }
+  if(p===q) { el('rsa-key-out').innerHTML='<span class="fail">p 和 q 不能相同</span>'; return; }
+  const n=p*q, phi=(p-1n)*(q-1n);
+  let e=65537n; if(e>=phi) e=3n;
+  while(e<phi && extGcd(e,phi)[0]!==1n) e+=2n;
+  const d=modInv(e,phi);
+  rsaKeys={p,q,n,phi,e,d};
+  el('rsa-key-out').innerHTML = `<span class="key">步骤1: 选择两个素数</span>
+  p = <span class="val">${p}</span>, q = <span class="val">${q}</span>
+
+<span class="key">步骤2: 计算模数</span>
+  n = p × q = <span class="val">${n}</span>
+
+<span class="key">步骤3: 计算欧拉函数</span>
+  φ(n) = (p-1)(q-1) = <span class="val">${phi}</span>
+
+<span class="key">步骤4: 选择公钥指数 e (与φ(n)互素)</span>
+  e = <span class="val">${e}</span>   (gcd(e, φ(n)) = 1)
+
+<span class="key">步骤5: 计算私钥指数 d (e的模逆元)</span>
+  d = e⁻¹ mod φ(n) = <span class="val">${d}</span>
+
+<span class="hl">公钥 (n, e) = (${n}, ${e})</span>
+<span class="hl">私钥 (n, d) = (${n}, ${d})</span>`;
+  el('rsa-m').max = Number(n)-1;
+}
+function rsaGenRandom() {
+  const primes=[11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97];
+  const a=primes[Math.floor(Math.random()*primes.length)];
+  let b=a; while(b===a) b=primes[Math.floor(Math.random()*primes.length)];
+  el('rsa-p').value=a; el('rsa-q').value=b; rsaGen();
+}
+function rsaEncrypt() {
+  if(!rsaKeys.n) { el('rsa-enc-out').innerHTML='<span class="fail">请先生成密钥对</span>'; return; }
+  const m=BigInt(el('rsa-m').value);
+  if(m>=rsaKeys.n) { el('rsa-enc-out').innerHTML='<span class="fail">明文 m 必须小于 n</span>'; return; }
+  const c=modPow(m,rsaKeys.e,rsaKeys.n);
+  el('rsa-c').value=c.toString();
+  el('rsa-enc-out').innerHTML=`<span class="key">加密公式:</span> c = m^e mod n
+<span class="key">计算:</span> c = ${m}^${rsaKeys.e} mod ${rsaKeys.n}
+<span class="val">密文 c = ${c}</span>`;
+}
+function rsaDecrypt() {
+  if(!rsaKeys.d) { el('rsa-dec-out').innerHTML='<span class="fail">请先生成密钥对</span>'; return; }
+  const c=BigInt(el('rsa-c').value); if(!c && c!==0n) { el('rsa-dec-out').innerHTML='<span class="fail">请先加密</span>'; return; }
+  const m=modPow(c,rsaKeys.d,rsaKeys.n);
+  el('rsa-dec-out').innerHTML=`<span class="key">解密公式:</span> m = c^d mod n
+<span class="key">计算:</span> m = ${c}^${rsaKeys.d} mod ${rsaKeys.n}
+<span class="ok">明文 m = ${m}</span>
+${m===BigInt(el('rsa-m').value)?'<span class="ok">✓ 解密正确！还原了原始明文</span>':'<span class="fail">✗ 解密结果不匹配</span>'}`;
+}
+
+// ==================== Hash ====================
+async function sha(buf,algo){return hex(await crypto.subtle.digest(algo,buf));}
+async function hashCalc() {
+  const inp=strToBuf(el('hash-input1').value);
+  el('hash-sha256').textContent=await sha(inp,'SHA-256');
+  el('hash-sha384').textContent=await sha(inp,'SHA-384');
+  el('hash-sha512').textContent=await sha(inp,'SHA-512');
+}
+async function hashAvalanche() {
+  const a=el('hash-a').value, b=el('hash-b').value;
+  const ha=await sha(strToBuf(a),'SHA-256'), hb=await sha(strToBuf(b),'SHA-256');
+  el('hash-a-out').textContent=ha; el('hash-b-out').textContent=hb;
+  // Binary display
+  const bitsA=ha.match(/../g).map(h=>parseInt(h,16).toString(2).padStart(8,'0')).join('');
+  const bitsB=hb.match(/../g).map(h=>parseInt(h,16).toString(2).padStart(8,'0')).join('');
+  let diff=0;
+  el('hash-a-bits').innerHTML=''; el('hash-b-bits').innerHTML='';
+  for(let i=0;i<bitsA.length;i++){
+    const d=bitsA[i]!==bitsB[i]; if(d) diff++;
+    el('hash-a-bits').innerHTML+=`<div class="bit ${bitsA[i]==='1'?'b1':'b0'}">${bitsA[i]}</div>`;
+    el('hash-b-bits').innerHTML+=`<div class="bit ${d?'diff':(bitsB[i]==='1'?'b1':'b0')}">${bitsB[i]}</div>`;
+  }
+  el('hash-diff-pct').textContent=`差异: ${diff}/${bitsA.length} 位 (${(diff/bitsA.length*100).toFixed(1)}%) — ${diff/bitsA.length>0.4?'✓ 雪崩效应良好':'✗ 差异不够大'}`;
+}
+
+// ==================== ECDSA ====================
+let signState = {};
+async function signGen() {
+  const k = await crypto.subtle.generateKey({name:'ECDSA',namedCurve:'P-256'},true,['sign','verify']);
+  const pubRaw = await crypto.subtle.exportKey('raw', k.publicKey);
+  const privRaw = await crypto.subtle.exportKey('pkcs8', k.privateKey);
+  signState = {kp:k, pubHex:hex(pubRaw), privHex:hex(privRaw)};
+  el('sign-key-out').innerHTML=`<span class="key">曲线:</span> <span class="val">secp256r1 (P-256)</span>
+<span class="key">私钥 (PKCS8):</span> <span class="val">${signState.privHex.substring(0,64)}...</span>
+<span class="key">公钥 (未压缩):</span> <span class="val">04${signState.pubHex.substring(0,60)}...</span>
+<span class="ok">✓ 密钥对生成成功</span>`;
+}
+async function signDo() {
+  if(!signState.kp) { el('sign-key-out').innerHTML+='<span class="fail">\n✗ 请先生成密钥</span>'; return; }
+  const msg = el('sign-msg').value;
+  const sig = await crypto.subtle.sign({name:'ECDSA',hash:'SHA-256'}, signState.kp.privateKey, strToBuf(msg));
+  signState.sig = sig; signState.msg = msg;
+  el('sign-key-out').innerHTML+=`\n\n<span class="key">签名过程:</span>
+  1. 计算消息哈希: H = SHA-256("${msg}")
+  2. 选择随机数 k, 计算 R = k·G
+  3. 计算 r = R.x mod n
+  4. 计算 s = k⁻¹(H + r·sk) mod n
+<span class="key">签名 (r,s):</span> <span class="val">${hex(sig).substring(0,80)}...</span>
+<span class="ok">✓ 签名成功</span>`;
+}
+async function signVerify(isBad) {
+  if(!signState.sig) { const out=isBad?el('sign-v-bad-out'):el('sign-v-out'); out.innerHTML='<span class="fail">请先签名</span>'; return; }
+  const msg = isBad ? el('sign-v-bad').value : el('sign-v-msg').value;
+  const valid = await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'}, signState.kp.publicKey, signState.sig, strToBuf(msg));
+  const out = isBad ? el('sign-v-bad-out') : el('sign-v-out');
+  const step = el('sign-result-step');
+  step.classList.remove('done');
+  if(valid) { out.innerHTML=`<span class="ok">✓ 签名验证通过！</span>\n消息完整，签名有效`; step.classList.add('done'); }
+  else { out.innerHTML=`<span class="fail">✗ 签名验证失败！</span>\n${isBad?'消息被篡改，签名无效（这正是数字签名的安全保证）':'签名与消息不匹配'}`; }
+}
+
+// ==================== Shamir ====================
+let shrState = {};
+function shrSplit() {
+  const S=BigInt(el('shr-secret').value), n=Number(el('shr-n').value), t=Number(el('shr-t').value);
+  if(t<2){el('shr-poly-out').innerHTML='<span class="fail">门限 t 至少为 2</span>';return;}
+  if(t>n){el('shr-poly-out').innerHTML='<span class="fail">门限 t 不能大于总份额 n</span>';return;}
+  const prime = 2147483647n;
+  const coeffs = [((S%prime)+prime)%prime];
+  for(let i=1;i<t;i++) coeffs.push(BigInt(Math.floor(Math.random()*999999)+1));
+  const shares = [];
+  // --- Build detailed output ---
+  let out = `<span class="key">━━━ 第一步：初始化参数 ━━━</span>\n`;
+  out += `<span class="key">秘密值 S =</span> <span class="val">${S}</span>\n`;
+  out += `<span class="key">素数域 p =</span> <span class="val">${prime}</span> <span style="color:var(--text2)">(Mersenne 素数 2³¹−1)</span>\n`;
+  out += `<span class="key">方案参数:</span> <span class="val">(${t}, ${n})</span> 门限 — 分 ${n} 份，任意 ${t} 份可恢复\n\n`;
+
+  out += `<span class="key">━━━ 第二步：构造随机多项式 ━━━</span>\n`;
+  out += `<span style="color:var(--text2)">要求: f(x) 为 ${t-1} 次多项式，且 f(0) = S</span>\n`;
+  out += `<span class="key">常数项 a₀ =</span> S mod p = ${S} mod ${prime} = <span class="val">${coeffs[0]}</span>\n`;
+  for(let i=1;i<t;i++){
+    const labels = ['a₁','a₂','a₃','a₄','a₅','a₆','a₇','a₈','a₉'];
+    out += `<span class="key">随机系数 ${labels[i-1]||('a'+i)} =</span> <span class="val">${coeffs[i]}</span>\n`;
+  }
+  // Build polynomial string
+  const terms = coeffs.map((c,i)=>{
+    if(i===0) return c.toString();
+    const sup = i===1?'':`<sup>${i}</sup>`;
+    return `${c}·x${sup}`;
+  });
+  out += `\n<span class="hl">f(x) = ${terms.join(' + ')}  (mod ${prime})</span>\n`;
+  out += `<span class="ok">✓ 验证: f(0) = ${coeffs[0]} = S mod p</span>\n\n`;
+
+  out += `<span class="key">━━━ 第三步：逐份计算份额 ━━━</span>\n`;
+  out += `<span style="color:var(--text2)">对每个 i = 1, 2, ..., ${n}，计算 yᵢ = f(i) mod p</span>\n`;
+  for(let i=1;i<=n;i++){
+    let x=BigInt(i), y=0n, xp=1n;
+    out += `\n<span class="hl">━━ 份额 ${i}: 计算 f(${i}) ━━</span>\n`;
+    let termStrs = [];
+    for(let j=0;j<t;j++){
+      const termVal = (coeffs[j]*xp)%prime;
+      const sup = j===1?'':(j===0?'':`<sup>${j}</sup>`);
+      const xStr = j===0?'':(j===1?`·${x}`:`·${x}${sup}`);
+      out += `  ${j===0?'':''}a${j===0?'₀':j}${xStr} = ${coeffs[j]}${j===0?'':(' × '+(j===1?x.toString():x.toString()+sup.replace(/<[^>]*>/g,'')))} = <span class="val">${termVal}</span>\n`;
+      termStrs.push(termVal);
+      y=(y+coeffs[j]*xp)%prime;
+      xp=(xp*x)%prime;
+    }
+    const yFinal=((y%prime)+prime)%prime;
+    out += `  <span class="key">求和:</span> ${termStrs.join(' + ')} = ${yFinal} (mod p)\n`;
+    out += `  <span class="ok">→ 份额 ${i} = (${i}, ${yFinal})</span>\n`;
+    shares.push({x,y:yFinal});
+  }
+  shrState={S,n,t,prime,coeffs,shares,selected:new Set()};
+  el('shr-poly-out').innerHTML=out;
+  let html='';
+  shares.forEach((s,i)=>{
+    html+=`<div class="share-card" data-idx="${i}" onclick="shrToggle(${i})">份额 ${i+1}: (${s.x}, ${s.y})</div>`;
+  });
+  el('shr-shares').innerHTML=html;
+  el('shr-rec-out').innerHTML='<span style="color:var(--text2)">选择至少 '+t+' 份后点击恢复</span>';
+}
+function shrToggle(i){
+  if(!shrState.selected) return;
+  if(shrState.selected.has(i)) shrState.selected.delete(i); else shrState.selected.add(i);
+  document.querySelectorAll('#shr-shares .share-card').forEach((c,idx)=>{
+    c.classList.toggle('selected', shrState.selected.has(idx));
+  });
+}
+function shrRecover(){
+  if(!shrState.shares) return;
+  const sel=[...shrState.selected].sort();
+  if(sel.length<shrState.t){el('shr-rec-out').innerHTML=`<span class="fail">需要至少 ${shrState.t} 份，当前只选了 ${sel.length} 份</span>`;return;}
+  const pts=sel.slice(0,shrState.t).map(i=>shrState.shares[i]);
+  const p=shrState.prime;
+  const k = pts.length;
+  let out = `<span class="key">━━━ 拉格朗日插值恢复秘密 ━━━</span>\n`;
+  out += `<span class="key">使用份额:</span> ${pts.map(pt=>`(${pt.x}, ${pt.y})`).join(', ')}\n`;
+  out += `<span class="key">素数域 p =</span> <span class="val">${p}</span>\n`;
+  out += `<span style="color:var(--text2)">公式: S = f(0) = Σ yᵢ · Lᵢ(0) mod p，其中 Lᵢ(0) = Π(j≠i) [−xⱼ / (xᵢ−xⱼ)] mod p</span>\n\n`;
+
+  let secret=0n;
+  const lagranges = [];
+  for(let i=0;i<k;i++){
+    out += `<span class="hl">━━━ 计算基多项式 L${i===0?'₀':i}(0) ━━━</span>\n`;
+    out += `<span style="color:var(--text2)">对应份额: (x${i===0?'₀':i}, y${i===0?'₀':i}) = (${pts[i].x}, ${pts[i].y})</span>\n\n`;
+
+    // Numerator: Π(j≠i) (0 - x_j) = Π(j≠i) (-x_j)
+    out += `  <span class="key">分子 N${i===0?'₀':i} = Π(j≠${i}) (0 − xⱼ):</span>\n`;
+    let num=1n;
+    const numFactors=[];
+    for(let j=0;j<k;j++){
+      if(i===j) continue;
+      const negXj = ((-pts[j].x % p)+p)%p;
+      const rawNeg = -pts[j].x;
+      out += `    (0 − x${j===0?'₀':j}) = (0 − ${pts[j].x}) = ${rawNeg} ≡ <span class="val">${negXj}</span> (mod p)\n`;
+      num=(num*negXj)%p;
+      numFactors.push(negXj);
+    }
+    out += `    N${i===0?'₀':i} = ${numFactors.join(' × ')} mod p = <span class="val">${num}</span>\n\n`;
+
+    // Denominator: Π(j≠i) (x_i - x_j)
+    out += `  <span class="key">分母 D${i===0?'₀':i} = Π(j≠${i}) (x${i===0?'₀':i} − xⱼ):</span>\n`;
+    let den=1n;
+    const denFactors=[];
+    for(let j=0;j<k;j++){
+      if(i===j) continue;
+      const diff = pts[i].x - pts[j].x;
+      const diffMod = ((diff%p)+p)%p;
+      out += `    (x${i===0?'₀':i} − x${j===0?'₀':j}) = (${pts[i].x} − ${pts[j].x}) = ${diff} ≡ <span class="val">${diffMod}</span> (mod p)\n`;
+      den=(den*diffMod)%p;
+      denFactors.push(diffMod);
+    }
+    out += `    D${i===0?'₀':i} = ${denFactors.join(' × ')} mod p = <span class="val">${den}</span>\n\n`;
+
+    // Modular inverse via extGcd
+    const [g,invRaw]=extGcdS(den,p);
+    const inv=((invRaw%p)+p)%p;
+    out += `  <span class="key">模逆元 D${i===0?'₀':i}⁻¹ mod p (扩展欧几里得):</span>\n`;
+    out += `    ${den} × <span class="val">${inv}</span> mod ${p} = ${(den*inv)%p} <span class="ok">✓</span>\n\n`;
+
+    // L_i(0) = num * inv mod p
+    const lagrange=((num*inv)%p+p)%p;
+    lagranges.push(lagrange);
+    out += `  <span class="key">L${i===0?'₀':i}(0) = N${i===0?'₀':i} × D${i===0?'₀':i}⁻¹ mod p</span>\n`;
+    out += `    = ${num} × ${inv} mod ${p}\n`;
+    out += `    = <span class="val">${lagrange}</span>\n\n`;
+
+    // y_i * L_i(0)
+    const term=(pts[i].y*lagrange)%p;
+    out += `  <span class="key">y${i===0?'₀':i} × L${i===0?'₀':i}(0) = ${pts[i].y} × ${lagrange} mod p = <span class="val">${term}</span></span>\n\n`;
+    secret=(secret+term)%p;
+  }
+
+  // Final summation
+  secret=((secret%p)+p)%p;
+  const expected=((shrState.S%shrState.prime)+shrState.prime)%shrState.prime;
+  const ok = secret===expected;
+
+  out += `<span class="key">━━━ 最终求和 ━━━</span>\n`;
+  out += `<span style="color:var(--text2)">S = Σ yᵢ·Lᵢ(0) mod p</span>\n`;
+  const termStrs = pts.map((pt,i)=>`y${i===0?'₀':i}·L${i===0?'₀':i}`).join(' + ');
+  const termVals = pts.map((pt,i)=>(pt.y*lagranges[i])%p);
+  out += `  = ${termStrs}\n`;
+  out += `  = ${termVals.join(' + ')} mod ${p}\n`;
+  out += `  = <span class="val">${secret}</span>\n\n`;
+  out += ok ? `<span class="ok">✓ 恢复成功！f(0) = ${secret} = 原始秘密 S</span>\n` : `<span class="fail">✗ 恢复失败，结果不匹配</span>\n`;
+  out += `\n<span style="color:var(--text2)">这正是拉格朗日插值定理的数学保证:\n${k} 个点唯一确定一个 ${k-1} 次多项式，f(0) 即为秘密值。</span>`;
+  el('shr-rec-out').innerHTML=out;
+}
+function extGcdS(a,b){if(b===0n)return[a,1n,0n];const[g,x,y]=extGcdS(b,a%b);return[g,y,x-(a/b)*y];}
+
+// ==================== Paillier ====================
+let paiState = {};
+function paiGen() {
+  const p=BigInt(el('pai-p').value), q=BigInt(el('pai-q').value);
+  if(!isPrime(Number(p))||!isPrime(Number(q))){el('pai-key-out').innerHTML='<span class="fail">p 和 q 必须是素数</span>';return;}
+  if(p===q){el('pai-key-out').innerHTML='<span class="fail">p 和 q 不能相同</span>';return;}
+  const n=p*q, n2=n*n, lam=lcm(p-1n,q-1n), g=n+1n;
+  // L(x) = (x-1)/n
+  function L(x){return((x-1n)/n);}
+  const gLam=modPow(g,lam,n2);
+  const mu=modInv(L(gLam),n);
+  paiState={p,q,n,n2,lam,g,mu};
+  el('pai-key-out').innerHTML=`<span class="key">Paillier 密钥生成:</span>
+  p = ${p}, q = ${q}
+  n = p × q = <span class="val">${n}</span>
+  n² = ${n2}
+  λ = lcm(p-1, q-1) = lcm(${p-1n}, ${q-1n}) = <span class="val">${lam}</span>
+  g = n + 1 = <span class="val">${g}</span>
+  μ = L(g^λ mod n²)⁻¹ mod n = <span class="val">${mu}</span>
+
+<span class="hl">公钥: (n=${n}, g=${g})</span>
+<span class="hl">私钥: λ=${lam}, μ=${mu}</span>`;
+}
+function lcm(a,b){const[g]=extGcdS(a<0n?-a:a,b<0n?-b:b);const ab=a<0n?-a*b:a*b;const g2=g<0n?-g:g;return((ab/g2)<0n?-(ab/g2):(ab/g2));}
+function paiEnc(m){
+  const{n,n2,g}=paiState;
+  let r; do{r=BigInt(Math.floor(Math.random()*Number(n)-1)+1);}while(r<=0n||r>=n);
+  return(modPow(g,m,n2)*modPow(r,n,n2))%n2;
+}
+function paiDec(c){
+  const{n,n2,lam,mu}=paiState;
+  function L(x){return((x-1n)/n);}
+  return(L(modPow(c,lam,n2))*mu%n+n)%n;
+}
+function paiCompute(){
+  if(!paiState.n){el('pai-out').innerHTML='<span class="fail">请先生成密钥</span>';return;}
+  const a=BigInt(el('pai-a').value), b=BigInt(el('pai-b').value), op=el('pai-op').value;
+  if(a<0n||b<0n){el('pai-out').innerHTML='<span class="fail">明文必须非负</span>';return;}
+  if(a>=paiState.n||b>=paiState.n){el('pai-out').innerHTML='<span class="fail">明文必须小于 n</span>';return;}
+  const encA=paiEnc(a), encB=paiEnc(b);
+  let encResult, resultVal, opDesc;
+  if(op==='add'){
+    encResult=(encA*encB)%paiState.n2;
+    resultVal=a+b;
+    opDesc='同态加法: Enc(a) × Enc(b) mod n² = Enc(a+b)';
+  } else {
+    encResult=modPow(encA,b,paiState.n2);
+    resultVal=a*b;
+    opDesc=`同态标量乘: Enc(a)^${b} mod n² = Enc(a×${b})`;
+  }
+  const dec=paiDec(encResult);
+  el('pai-out').innerHTML=`<span class="key">加密:</span>
+  Enc(${a}) = <span class="val">${encA}</span>
+  Enc(${b}) = <span class="val">${encB}</span>
+
+<span class="key">${opDesc}:</span>
+  密文运算结果 = <span class="val">${encResult}</span>
+  <span class="hl">注意: 整个运算过程中密文从未被解密！</span>
+
+<span class="key">解密:</span>
+  Dec(密文运算结果) = <span class="ok">${dec}</span>
+
+<span class="key">验证:</span> ${op==='add'?`${a} + ${b} = ${resultVal}`:`${a} × ${b} = ${resultVal}`}
+${dec===(resultVal%paiState.n+paiState.n)%paiState.n?'<span class="ok">✓ 同态性质验证通过！密文运算结果解密后等于明文运算结果</span>':'<span class="fail">✗ 验证失败</span>'}`;
+}
+
+// ==================== ABE ====================
+let abeState = {attrs:[], tree:null, users:[], cipherMsg:null};
+const defaultAttrs = ['教授','学生','计算机系','数学系','已认证','管理员','博士生','项目成员'];
+function abeAddAttr(){
+  const v=el('abe-new-attr').value.trim(); if(!v)return;
+  if(!abeState.attrs.includes(v)) abeState.attrs.push(v);
+  el('abe-new-attr').value=''; abeRenderAttrs(); abeRenderUserAttrs();
+}
+function abeRemoveAttr(a){
+  abeState.attrs=abeState.attrs.filter(x=>x!==a); abeRenderAttrs(); abeRenderUserAttrs();
+}
+function abeRenderAttrs(){
+  el('abe-attrs').innerHTML=abeState.attrs.map(a=>`<span class="attr-tag-input checked">${a} <span style="cursor:pointer;opacity:.5" onclick="event.stopPropagation();abeRemoveAttr('${a}')">×</span></span>`).join('');
+}
+// Initialize with defaults
+defaultAttrs.forEach(a=>abeState.attrs.push(a));
+abeRenderAttrs();
+
+function abeBuildTree(){
+  const rootType=el('abe-root-type').value;
+  const attrs=abeState.attrs;
+  if(attrs.length<2){el('abe-tree-display').innerHTML='<span class="fail">至少需要2个属性</span>';return;}
+  // Build a sample tree based on available attributes
+  let tree;
+  if(rootType==='AND'){
+    tree={type:'AND',children:[{type:'OR',children:[{type:'ATTR',value:attrs[0]},{type:'ATTR',value:attrs[1]}]},{type:'ATTR',value:attrs.length>2?attrs[2]:attrs[0]}]};
+    if(attrs.length>4) tree.children.push({type:'OR',children:[{type:'ATTR',value:attrs[3]},{type:'ATTR',value:attrs[4]}]});
+  } else {
+    tree={type:'OR',children:[{type:'AND',children:[{type:'ATTR',value:attrs[0]},{type:'ATTR',value:attrs[1]}]},{type:'AND',children:[{type:'ATTR',value:attrs.length>2?attrs[2]:attrs[0]},{type:'ATTR',value:attrs.length>3?attrs[3]:attrs[1]}]}]};
+  }
+  abeState.tree=tree;
+  el('abe-tree-display').innerHTML=renderTree(tree);
+}
+function renderTree(node){
+  if(node.type==='ATTR') return `<div class="tree-wrap"><div class="tree-node"><div class="node-box attr" id="tnode-${node.value}">${node.value}</div></div></div>`;
+  const cls=node.type==='AND'?'and':'or';
+  const childrenHtml=node.children.map(c=>renderTree(c)).join('');
+  return `<div class="tree-wrap"><div class="tree-node"><div class="node-box ${cls}" data-type="${node.type}">${node.type}</div></div><div class="tree-line"></div><div class="tree-branch">${childrenHtml}</div></div>`;
+}
+function abeEncrypt(){
+  if(!abeState.tree){el('abe-enc-out').innerHTML='<span class="fail">请先构造策略树</span>';return;}
+  const msg=el('abe-msg').value;
+  abeState.cipherMsg=msg;
+  // Generate a random "symmetric key" and XOR-encrypt the message
+  const key=Math.floor(Math.random()*256);
+  const ct=btoa(msg.split('').map((c,i)=>String.fromCharCode(c.charCodeAt(0)^key)).join(''));
+  abeState.encrypted={key,ct};
+  el('abe-enc-out').innerHTML=`<span class="key">CP-ABE 加密过程:</span>
+  1. 随机生成对称密钥 K = <span class="val">${key}</span>
+  2. 用 K 对消息做对称加密
+  3. 用策略树对 K 做属性加密
+
+<span class="key">密文:</span> <span class="val">${ct.substring(0,40)}...</span>
+<span class="key">访问策略:</span> ${treeToStr(abeState.tree)}
+<span class="ok">✓ 消息已加密，只有满足策略的用户才能解密</span>`;
+}
+function treeToStr(node){
+  if(node.type==='ATTR') return node.value;
+  return `(${node.children.map(treeToStr).join(node.type==='AND'?' AND ':' OR ')})`;
+}
+let abeCurrentUserAttrs = new Set();
+function abeRenderUserAttrs(){
+  el('abe-user-attrs').innerHTML=abeState.attrs.map(a=>`<span class="attr-tag-input ${abeCurrentUserAttrs.has(a)?'checked':''}" onclick="abeToggleUserAttr('${a}')">${a}</span>`).join('');
+}
+function abeToggleUserAttr(a){
+  if(abeCurrentUserAttrs.has(a)) abeCurrentUserAttrs.delete(a); else abeCurrentUserAttrs.add(a);
+  abeRenderUserAttrs();
+}
+function abeAddUser(){
+  const name=el('abe-uname').value.trim(); if(!name) return;
+  const attrs=[...abeCurrentUserAttrs];
+  abeState.users.push({name,attrs});
+  el('abe-uname').value=''; abeCurrentUserAttrs.clear(); abeRenderUserAttrs(); abeRenderUsers();
+}
+function evalTree(node, userAttrs){
+  if(node.type==='ATTR') return userAttrs.includes(node.value);
+  if(node.type==='AND') return node.children.every(c=>evalTree(c,userAttrs));
+  return node.children.some(c=>evalTree(c,userAttrs));
+}
+function abeRenderUsers(){
+  el('abe-users').innerHTML=abeState.users.map((u,idx)=>{
+    const canDec = abeState.tree ? evalTree(abeState.tree, u.attrs) : false;
+    let decResult = '';
+    if(abeState.encrypted && canDec){
+      const{key,ct}=abeState.encrypted;
+      try{decResult=atob(ct).split('').map((c,i)=>String.fromCharCode(c.charCodeAt(0)^key)).join('');}catch(e){decResult='[解密错误]';}
+    }
+    return `<div class="user-card" style="border-color:${canDec?'var(--green)':'var(--red)'}">
+      <div class="uname">${canDec?'✅':'🚫'} ${u.name}</div>
+      <div class="attrs">${u.attrs.map(a=>`<span class="attr-tag">${a}</span>`).join('')}</div>
+      <div style="margin-top:8px;font-size:12px">${canDec?`<span class="badge badge-green">可以解密</span>${decResult?`<div class="output" style="margin-top:6px"><span class="ok">解密结果: ${decResult}</span></div>`:''}`:'<span class="badge badge-red">无法解密</span><div style="color:var(--text2);font-size:11px;margin-top:4px">属性不满足访问策略</div>'}</div>
+    </div>`;
+  }).join('');
+  // Also highlight tree nodes
+  if(abeState.tree) highlightTree();
+}
+function highlightTree(){
+  // Reset all nodes
+  document.querySelectorAll('.node-box').forEach(n=>{n.classList.remove('satisfied','denied');});
+}
+abeRenderUserAttrs();
+
+// ==================== ZKP ====================
+let zkpState = {};
+function zkpSetup(){
+  const p=BigInt(el('zkp-p').value), g=BigInt(el('zkp-g').value), x=BigInt(el('zkp-x').value);
+  if(!isPrime(Number(p))){el('zkp-setup-out').innerHTML='<span class="fail">p 必须是素数</span>';return;}
+  const h=modPow(g,x,p); // public key
+  zkpState={p,g,x,h,step:0};
+  el('zkp-setup-out').innerHTML=`<span class="key">Schnorr 协议设置:</span>
+  公开参数: p = <span class="val">${p}</span>, g = <span class="val">${g}</span>
+  证明者秘密: x = <span class="val">${x}</span> (只有证明者知道)
+  公开验证值: h = g^x mod p = ${g}^${x} mod ${p} = <span class="val">${h}</span>
+
+<span class="hl">目标: 证明者要证明自己知道 x，但不泄露 x</span>`;
+  zkpState.step=0;
+  el('zkp-log').innerHTML='';
+}
+function zkpStep(step){
+  if(!zkpState.p){zkpLog('result','请先设置参数');return;}
+  const{p,g,x,h}=zkpState;
+  if(step===1){
+    const r=BigInt(Math.floor(Math.random()*Number(p-1n))+1);
+    const t=modPow(g,r,p);
+    zkpState.r=r; zkpState.t=t;
+    zkpLog('p2v',`<b>承诺 (Commitment):</b>\n  证明者选随机数 r = ${r}\n  计算 t = g^r mod p = ${g}^${r} mod ${p} = <b>${t}</b>\n  发送 t = ${t} 给验证者`);
+  } else if(step===2){
+    if(!zkpState.t){zkpLog('result','请先执行步骤1');return;}
+    const c=BigInt(Math.floor(Math.random()*Number(p-1n))+1);
+    zkpState.c=c;
+    zkpLog('v2p',`<b>挑战 (Challenge):</b>\n  验证者选随机挑战 c = <b>${c}</b>\n  发送 c 给证明者`);
+  } else if(step===3){
+    if(!zkpState.c){zkpLog('result','请先执行步骤1和2');return;}
+    const{r,c}=zkpState;
+    const s=((r+c*x)%(p-1n)+(p-1n))%(p-1n);
+    // Verify: g^s ≡ t · h^c (mod p)
+    const lhs=modPow(g,s,p);
+    const rhs=(zkpState.t*modPow(h,c,p))%p;
+    const valid=lhs===rhs;
+    zkpLog('p2v',`<b>响应 (Response):</b>\n  证明者计算 s = r + c·x mod (p-1)\n  s = ${r} + ${c}×${x} mod ${p-1n} = <b>${s}</b>\n  发送 s 给验证者`);
+    zkpLog(valid?'result':'fail',`<b>验证 (Verify):</b>\n  检验 g^s ≡ t · h^c (mod p)\n  左边: g^s = ${g}^${s} mod ${p} = <b>${lhs}</b>\n  右边: t·h^c = ${zkpState.t}·${h}^${c} mod ${p} = <b>${rhs}</b>\n  ${valid?'<span class="ok">✓ 等式成立！证明者确实知道秘密 x</span>':'<span class="fail">✗ 等式不成立</span>'}`);
+  }
+}
+function zkpCheat(){
+  if(!zkpState.p){zkpLog('result','请先设置参数');return;}
+  const{p,g}=zkpState;
+  // Pretend to know x but use a wrong x
+  const fakeX=BigInt(Math.floor(Math.random()*Number(p-1n))+1);
+  const r=BigInt(Math.floor(Math.random()*Number(p-1n))+1);
+  const t=modPow(g,r,p);
+  const c=BigInt(Math.floor(Math.random()*Number(p-1n))+1);
+  const s=((r+c*fakeX)%(p-1n)+(p-1n))%(p-1n);
+  const lhs=modPow(g,s,p);
+  const rhs=(t*modPow(zkpState.h,c,p))%p;
+  zkpLog('fail',`<b>作弊演示:</b> 用错误的秘密 x'=${fakeX} 尝试证明\n  计算 s = r + c·x' = ${s}\n  验证: g^s = ${lhs}\n        t·h^c = ${rhs}\n  ${lhs===rhs?'极小概率巧合通过':'<span class="fail">✗ 验证失败！作弊者无法通过验证</span>'}\n  <span class="hl">这正是零知识证明的安全保证: 不知道秘密就无法冒充</span>`);
+}
+function zkpReset(){zkpState.step=0;el('zkp-log').innerHTML='';}
+function zkpLog(type,html){
+  const cls=type==='p2v'?'p2v':type==='v2p'?'v2p':type==='fail'?'fail':'result';
+  const label=type==='p2v'?'P→V':type==='v2p'?'V→P':type==='fail'?'✗':'✓';
+  el('zkp-log').innerHTML+=`<div class="zkp-msg"><span class="dir ${cls}">${label}</span><div style="font-family:monospace;font-size:12.5px;white-space:pre-wrap">${html}</div></div>`;
+  el('zkp-log').scrollTop=el('zkp-log').scrollHeight;
+}
+
+// ==================== Init ====================
+hashCalc(); hashAvalanche();
+</script>
+</body>
+</html>
